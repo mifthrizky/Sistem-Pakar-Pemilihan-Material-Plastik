@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  # Service untuk Backend Python Flask
+  backend:
+    build: ./backend
+    # Volume untuk live-reload, jika ada perubahan di app.py, server otomatis restart
+    volumes:
+      - ./backend:/app
+    networks:
+      - sistem-pakar-net
+
+  # Service untuk Frontend PHP
+  frontend:
+    build: ./frontend
+    # Mapping port: Port 8080 di komputermu akan terhubung ke port 80 di container
+    ports:
+      - "8080:80"
+    # Volume untuk live-reload, agar perubahan pada file PHP langsung terlihat
+    volumes:
+      - ./frontend:/var/www/html
+    # Pastikan service backend sudah berjalan sebelum frontend dimulai
+    depends_on:
+      - backend
+    networks:
+      - sistem-pakar-net
+
+networks:
+  sistem-pakar-net:
+    driver: bridge
