@@ -74,7 +74,6 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal.
 
 ---
 
-````markdown
 # Sistem Pakar Pemilihan Material Plastik untuk Industri Otomotif
 
 <p align="center">
