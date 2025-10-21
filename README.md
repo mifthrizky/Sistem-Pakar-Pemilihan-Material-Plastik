@@ -156,35 +156,6 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal.
     -   Jawab semua pertanyaan sesuai dengan kebutuhan Anda.
     -   Lihat hasil rekomendasi yang diberikan oleh sistem.
 
----
-
-## 📂 Struktur Proyek
-
-````
-.
-├── backend/
-│   ├── app.py              \# Logika utama aplikasi Flask (API, knowledge base, scoring)
-│   ├── requirements.txt    \# Dependensi Python
-│   └── Dockerfile          \# Konfigurasi container untuk backend
-│
-├── frontend/
-│   ├── pages/
-│   │   ├── pertanyaan.php  \# Halaman kuesioner
-│   │   └── hasil.php       \# Halaman untuk menampilkan hasil rekomendasi
-│   ├── public/
-│   │   └── style.css       \# File CSS hasil kompilasi dari Tailwind
-│   ├── src/
-│   │   └── input.css       \# File sumber Tailwind CSS
-│   ├── index.php           \# Halaman utama (landing page)
-│   ├── package.json        \# Dependensi Node.js (untuk Tailwind)
-│   ├── tailwind.config.js  \# Konfigurasi Tailwind CSS
-│   └── Dockerfile          \# Konfigurasi container untuk frontend (PHP + Apache)
-│
-├── .gitignore
-├── docker-compose.yml      \# Mendefinisikan dan mengorkestrasi layanan frontend & backend
-└── README.md               \# Anda sedang membacanya
-````
-
 ```
 
 ## 📜 Lisensi
