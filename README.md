@@ -161,7 +161,6 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal.
 ## 📂 Struktur Proyek
 
 ````
-
 .
 ├── backend/
 │   ├── app.py              \# Logika utama aplikasi Flask (API, knowledge base, scoring)
@@ -184,6 +183,7 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal.
 ├── .gitignore
 ├── docker-compose.yml      \# Mendefinisikan dan mengorkestrasi layanan frontend & backend
 └── README.md               \# Anda sedang membacanya
+````
 
 ```
 
