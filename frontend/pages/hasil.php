@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $rekomendasi = "Tidak Ditemukan";
 $alasan = "Tidak ada material yang cocok dengan kriteria Anda. Silakan coba kombinasi lain.";
@@ -8,7 +9,7 @@ $skor_detail = [];
 $alternatif = null;
 $jawaban_pengguna = [];
 
-// Pastikan ada data yang dikirim
+// Cek ada data yg dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
     // URL dari service backend Flask di Docker
     $url = 'http://backend:5000/api/rekomendasi';
@@ -44,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
     exit();
 }
 
-// Data untuk JavaScript
-$data_for_js = [
+// Data untuk disimpan di session
+$report_data = [
     'rekomendasi' => $rekomendasi,
     'alasan' => $alasan,
     'karakteristik' => $karakteristik,
@@ -54,6 +55,9 @@ $data_for_js = [
     'skor_detail' => $skor_detail,
     'alternatif' => $alternatif
 ];
+
+// Simpan data ke session untuk digunakan oleh PDF generator
+$_SESSION['report_data'] = $report_data;
 
 // Fungsi bantu untuk menampilkan jawaban dengan format yang lebih baik
 function format_jawaban($key, $value)
@@ -236,9 +240,6 @@ function get_confidence_color($confidence_str)
                         <span class="text-sm font-bold text-[#3d453c] uppercase tracking-wide">Rekomendasi Material</span>
                     </div>
                     <div class="inline-flex items-center justify-center bg-[#3d453c] text-white text-2xl md:text-3xl font-bold font-display px-8 py-4 rounded-2xl shadow-xl mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mr-3">
-                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-                        </svg>
                         <span><?= $rekomendasi ?></span>
                     </div>
 
@@ -290,14 +291,14 @@ function get_confidence_color($confidence_str)
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t border-gray-200">
-                    <button onclick="handleDownloadResults()" class="bg-[#3d453c] hover:bg-[#2a3028] text-white font-bold py-3 px-6 rounded-full inline-flex items-center justify-center gap-x-2 group transition-all duration-300 transform hover:scale-105">
+                    <a href="unduh_laporan.php" target="_blank" class="bg-[#3d453c] hover:bg-[#2a3028] text-white font-bold py-3 px-6 rounded-full inline-flex items-center justify-center gap-x-2 group transition-all duration-300 transform hover:scale-105">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-y-[-2px] transition-transform">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" x2="12" y1="15" y2="3" />
                         </svg>
-                        Unduh Hasil Lengkap
-                    </button>
+                        Unduh Laporan PDF
+                    </a>
                     <a href="../index.php" class="bg-gray-200 hover:bg-gray-300 text-[#3d453c] font-bold py-3 px-6 rounded-full inline-flex items-center justify-center gap-x-2 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 2v6h6" />
@@ -390,7 +391,7 @@ function get_confidence_color($confidence_str)
             </div>
         <?php endif; ?>
 
-        <!-- Detail Kriteria Anda -->
+        <!-- Detail Kriteria -->
         <div class="max-w-5xl mx-auto mb-12 slide-up-delay-2">
             <div class="bg-white/60 backdrop-blur-lg border border-white/40 rounded-2xl shadow-lg p-8 md:p-12">
                 <h3 class="text-2xl font-display font-semibold text-[#3d453c] mb-6 flex items-center gap-x-2">
@@ -426,76 +427,76 @@ function get_confidence_color($confidence_str)
     </div>
 
     <script>
-        const dataToDownload = <?php echo json_encode($data_for_js); ?>;
+        // const dataToDownload = <?php echo json_encode($data_for_js); ?>;
 
-        function handleDownloadResults() {
-            let resultsText = `╔════════════════════════════════════════════════╗\n`;
-            resultsText += `║  HASIL REKOMENDASI SISTEM PAKAR MATERIAL DASHBOARD        ║\n`;
-            resultsText += `╚════════════════════════════════════════════════╝\n\n`;
+        // function handleDownloadResults() {
+        //     let resultsText = `╔════════════════════════════════════════════════╗\n`;
+        //     resultsText += `║  HASIL REKOMENDASI SISTEM PAKAR MATERIAL DASHBOARD        ║\n`;
+        //     resultsText += `╚════════════════════════════════════════════════╝\n\n`;
 
-            resultsText += `🏆 REKOMENDASI MATERIAL : \n`;
-            resultsText += `${dataToDownload.rekomendasi}\n\n`;
+        //     resultsText += `🏆 REKOMENDASI MATERIAL : \n`;
+        //     resultsText += `${dataToDownload.rekomendasi}\n\n`;
 
-            resultsText += `📊 CONFIDENCE LEVEL : \n`;
-            resultsText += `${dataToDownload.confidence}\n\n`;
+        //     resultsText += `📊 CONFIDENCE LEVEL : \n`;
+        //     resultsText += `${dataToDownload.confidence}\n\n`;
 
-            resultsText += `💡 ALASAN REKOMENDASI : \n`;
-            resultsText += `${dataToDownload.alasan}\n\n`;
+        //     resultsText += `💡 ALASAN REKOMENDASI : \n`;
+        //     resultsText += `${dataToDownload.alasan}\n\n`;
 
-            if (dataToDownload.karakteristik && dataToDownload.karakteristik.length > 0) {
-                resultsText += `✨ KARAKTERISTIK UTAMA : \n`;
-                dataToDownload.karakteristik.forEach((k, i) => {
-                    resultsText += `${i + 1}. ${k}\n`;
-                });
-                resultsText += `\n`;
-            }
+        //     if (dataToDownload.karakteristik && dataToDownload.karakteristik.length > 0) {
+        //         resultsText += `✨ KARAKTERISTIK UTAMA : \n`;
+        //         dataToDownload.karakteristik.forEach((k, i) => {
+        //             resultsText += `${i + 1}. ${k}\n`;
+        //         });
+        //         resultsText += `\n`;
+        //     }
 
-            if (dataToDownload.alternatif && dataToDownload.alternatif.material) {
-                resultsText += `🔄 MATERIAL ALTERNATIF : \n`;
-                dataToDownload.alternatif.material.forEach((mat, i) => {
-                    const score = dataToDownload.skor_detail[mat] || 'N/A';
-                    resultsText += `${i + 1}. ${mat} (${score} poin)\n`;
-                });
-                resultsText += `\n`;
-            }
+        //     if (dataToDownload.alternatif && dataToDownload.alternatif.material) {
+        //         resultsText += `🔄 MATERIAL ALTERNATIF : \n`;
+        //         dataToDownload.alternatif.material.forEach((mat, i) => {
+        //             const score = dataToDownload.skor_detail[mat] || 'N/A';
+        //             resultsText += `${i + 1}. ${mat} (${score} poin)\n`;
+        //         });
+        //         resultsText += `\n`;
+        //     }
 
-            resultsText += `─────────────────────────────────────────────────────────\n`;
-            resultsText += `📋 KRITERIA YANG ANDA PILIH\n`;
-            resultsText += `─────────────────────────────────────────────────────────\n`;
-            for (const [key, value] of Object.entries(dataToDownload.jawaban)) {
-                const formatted = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
-                resultsText += `${formatted}: ${value}\n`;
-            }
+        //     resultsText += `─────────────────────────────────────────────────────────\n`;
+        //     resultsText += `📋 KRITERIA YANG ANDA PILIH\n`;
+        //     resultsText += `─────────────────────────────────────────────────────────\n`;
+        //     for (const [key, value] of Object.entries(dataToDownload.jawaban)) {
+        //         const formatted = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+        //         resultsText += `${formatted}: ${value}\n`;
+        //     }
 
-            if (dataToDownload.skor_detail) {
-                resultsText += `\n─────────────────────────────────────────────────────────\n`;
-                resultsText += `📊 DETAIL SCORING SEMUA MATERIAL\n`;
-                resultsText += `─────────────────────────────────────────────────────────\n`;
+        //     if (dataToDownload.skor_detail) {
+        //         resultsText += `\n─────────────────────────────────────────────────────────\n`;
+        //         resultsText += `📊 DETAIL SCORING SEMUA MATERIAL\n`;
+        //         resultsText += `─────────────────────────────────────────────────────────\n`;
 
-                const sortedScores = Object.entries(dataToDownload.skor_detail)
-                    .sort((a, b) => b[1] - a[1]);
+        //         const sortedScores = Object.entries(dataToDownload.skor_detail)
+        //             .sort((a, b) => b[1] - a[1]);
 
-                sortedScores.forEach(([material, score], i) => {
-                    resultsText += `${i + 1}. ${material}: ${score} poin\n`;
-                });
-            }
+        //         sortedScores.forEach(([material, score], i) => {
+        //             resultsText += `${i + 1}. ${material}: ${score} poin\n`;
+        //         });
+        //     }
 
-            resultsText += `\n─────────────────────────────────────────────────────────\n`;
-            resultsText += `Generated by: Sistem Pakar Material Dashboard\n`;
-            resultsText += `Date: ${new Date().toLocaleString('id-ID')}\n`;
+        //     resultsText += `\n─────────────────────────────────────────────────────────\n`;
+        //     resultsText += `Generated by: Sistem Pakar Material Dashboard\n`;
+        //     resultsText += `Date: ${new Date().toLocaleString('id-ID')}\n`;
 
-            const blob = new Blob([resultsText], {
-                type: 'text/plain;charset=utf-8'
-            });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `hasil-rekomendasi-material-${Date.now()}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
+        //     const blob = new Blob([resultsText], {
+        //         type: 'text/plain;charset=utf-8'
+        //     });
+        //     const url = URL.createObjectURL(blob);
+        //     const a = document.createElement('a');
+        //     a.href = url;
+        //     a.download = `hasil-rekomendasi-material-${Date.now()}.txt`;
+        //     document.body.appendChild(a);
+        //     a.click();
+        //     document.body.removeChild(a);
+        //     URL.revokeObjectURL(url);
+        // }
     </script>
 </body>
 

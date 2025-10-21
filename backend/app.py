@@ -157,7 +157,7 @@ def get_rekomendasi():
         hasil["skor_detail"] = scores
         hasil["confidence"] = f"{(max_score / sum(scores.values()) * 100):.1f}%" if sum(scores.values()) > 0 else "0%"
         
-        # Tambahkan alternatif (2 material dengan skor tertinggi berikutnya)
+        # Alternatif (2 material dengan skor tertinggi berikutnya)
         sorted_materials = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         alternatif = [mat for mat, score in sorted_materials[1:3] if score >= 2]
         

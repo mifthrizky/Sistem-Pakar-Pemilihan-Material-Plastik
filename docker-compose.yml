@@ -13,12 +13,12 @@ services:
   # Service untuk Frontend PHP
   frontend:
     build: ./frontend
-    # Mapping port: Port 8080 di komputermu akan terhubung ke port 80 di container
+    # Mapping port: Port 8080 di komputer akan terhubung ke port 80 di container
     ports:
       - "8080:80"
     # Volume untuk live-reload, agar perubahan pada file PHP langsung terlihat
     volumes:
-      - ./frontend:/var/www/html
+      - .:/var/www/html
     # Pastikan service backend sudah berjalan sebelum frontend dimulai
     depends_on:
       - backend
