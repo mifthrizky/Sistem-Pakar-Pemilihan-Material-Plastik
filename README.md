@@ -161,4 +161,3 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal.
 ## 📜 Lisensi
 
 Proyek ini dilisensikan di bawah **Lisensi MIT**. Lihat file `LICENSE` untuk detail lebih lanjut.
-```
