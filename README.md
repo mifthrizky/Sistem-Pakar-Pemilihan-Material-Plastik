@@ -19,6 +19,18 @@ Aplikasi ini menggunakan pendekatan berbasis aturan (*rule-based*) dengan sistem
 
 ---
 
+## Halaman Awal
+<img width="1467" height="875" alt="image" src="https://github.com/user-attachments/assets/ca3b3241-8f64-4af4-9c68-7b506c769a33" />
+
+## Halaman Pertanyaan
+<img width="1328" height="820" alt="image" src="https://github.com/user-attachments/assets/5232eef7-8c10-416e-a9cd-44670c2e912f" />
+
+## Halaman Hasil
+<img width="1205" height="938" alt="image" src="https://github.com/user-attachments/assets/43d8b2ef-3518-4ba9-8664-187f48faa797" />
+
+## Cetak Laporan
+<img width="656" height="911" alt="image" src="https://github.com/user-attachments/assets/956c74ab-1044-47cb-81df-2684475129a4" />
+
 ## 🚀 Teknologi yang Digunakan
 
 -   **Frontend**:
